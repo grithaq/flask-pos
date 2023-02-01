@@ -24,6 +24,19 @@ def add_category():
             return redirect(url_for("item_blueprint.list_category"))
     return render_template("add_category.html", form=form)
 
+@item_blueprint.route('/category/<id>/edit', methods=['POST', 'GET'])
+def edit_category(id):
+    category= Category.query.filter_by(id=id).first()
+    form = CategoryForm()
+    if request.method=='POST' and form.validate_on_submit:
+        category.name = form.name.data
+        db.session.add(category)
+        db.session.commit()
+        return redirect(url_for('item_blueprint.list_category'))
+    form.name.data = category.name
+    return render_template('edit_category.html', form=form, id=id)
+
+
 @item_blueprint.route('/category/<id>/delete')
 def delete_category(id):
     category = Category.query.filter_by(id=id).first()
