@@ -22,3 +22,10 @@ def add_category():
             db.session.commit()
             return redirect(url_for("item_blueprint.list_category"))
     return render_template("add_category.html", form=form)
+
+@item_blueprint.route('/category/<id>/delete')
+def delete_category(id):
+    category = Category.query.filter_by(id=id).first()
+    db.session.delete(category)
+    db.session.commit()
+    return redirect(url_for("item_blueprint.list_category"))
