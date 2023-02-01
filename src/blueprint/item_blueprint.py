@@ -1,7 +1,8 @@
 from flask import Blueprint, redirect, request, url_for, render_template
-from form.form_item import CategoryForm
-from models import Category
-from extensions import db
+from form.form_item import CategoryForm, ItemForm
+from models import Category, Item
+from extensions import db, UPLOAD_FOLDER
+import os
 
 item_blueprint = Blueprint("item_blueprint", __name__)
 
@@ -29,3 +30,24 @@ def delete_category(id):
     db.session.delete(category)
     db.session.commit()
     return redirect(url_for("item_blueprint.list_category"))
+
+
+@item_blueprint.route("/category/<id>/item/add", methods=['GET', 'POST'])
+def add_item(id):
+    form = ItemForm()
+    if request.method=="POST" and form.validate_on_submit:
+        item = Item()
+        item.name = form.name.data
+        item.desctiption = form.description.data
+        item.price = form.price.data
+        item.stock = form.stock.data
+        item.category_id = id
+        if form.image.data!=None:
+            file = form.image.data
+            filename = file.filename
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            item.image = os.path.join("/static/media", filename)
+        db.session.add(item)
+        db.session.commit()
+        return redirect(url_for('item_blueprint.list_category'))
+    return render_template("add_item.html", form=form, id=id)
