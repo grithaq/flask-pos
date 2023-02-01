@@ -32,6 +32,11 @@ def delete_category(id):
     return redirect(url_for("item_blueprint.list_category"))
 
 
+@item_blueprint.route('/category/<id>/item/')
+def list_item(id):
+    items = Item.query.filter_by(category_id=id)
+    return render_template("items.html", items=items, id=id)
+
 @item_blueprint.route("/category/<id>/item/add", methods=['GET', 'POST'])
 def add_item(id):
     form = ItemForm()
@@ -49,5 +54,5 @@ def add_item(id):
             item.image = os.path.join("/static/media", filename)
         db.session.add(item)
         db.session.commit()
-        return redirect(url_for('item_blueprint.list_category'))
+        return redirect(url_for('item_blueprint.list_item',id=id))
     return render_template("add_item.html", form=form, id=id)
