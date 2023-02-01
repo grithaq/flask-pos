@@ -56,3 +56,10 @@ def add_item(id):
         db.session.commit()
         return redirect(url_for('item_blueprint.list_item',id=id))
     return render_template("add_item.html", form=form, id=id)
+
+@item_blueprint.route("/category/<c_id>/item/<id>")
+def delete_item(c_id,id):
+    item = Item.query.filter_by(id=id).first()
+    db.session.delete(item)
+    db.session.commit()
+    return redirect(url_for("item_blueprint.list_item",id=c_id))
