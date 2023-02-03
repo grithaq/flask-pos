@@ -14,7 +14,7 @@ class Category(db.Model):
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50))
-    desctiption = db.Column(db.String(100))
+    description = db.Column(db.String(100))
     price = db.Column(db.String(15))
     stock = db.Column(db.Integer, default=0)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))

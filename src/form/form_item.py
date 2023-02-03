@@ -12,4 +12,4 @@ class ItemForm(FlaskForm):
     description = StringField("Description", widget=TextArea())
     price = StringField("Price", widget=TextInput())
     stock = StringField("Stock", widget=TextInput())
-    image = FileField("Image",validators=[FileAllowed(['jpg', 'png','ppt',''])])
+    image = FileField("Image",validators=[FileAllowed(['jpg', 'png','ppt','', None])])

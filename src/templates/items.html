@@ -26,7 +26,7 @@
                         {{i.name}}
                     </td>
                     <td>
-                        {{i.desctiption}}
+                        {{i.description}}
                     </td>
                     <td>
                         {{i.price}}
@@ -36,7 +36,7 @@
                     </td>
                     <td>
                         <div class="form-group">
-                            <a href="" class="btn btn-primary">Update</a>
+                            <a href="{{url_for('item_blueprint.edit_item',c_id=id, id=i.id)}}" class="btn btn-primary">Update</a>
                             <a href="{{url_for('item_blueprint.delete_item',c_id=id, id=i.id)}}" class="btn btn-danger">Delete</a>
                         </div>
                     </td>

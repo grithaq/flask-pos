@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col">
+            <h1>Edit Item</h1>
+            <form action="{{url_for('item_blueprint.edit_item',c_id=c_id, id=id)}}" method='POST' enctype="multipart/form-data">
+                {{form.csrf_token}}
+                <div class="form-group">
+                    <label for="">
+                        {{form.name.label}}
+                    </label>
+                    {{form.name(class='form-control')}}
+                </div>
+                <div class="form-group">
+                    <label for="">
+                        {{form.description.label}}
+                    </label>
+                    {{form.description(class='form-control')}}
+                </div>
+                <div class="form-group">
+                    <label for="">
+                        {{form.price.label}}
+                    </label>
+                    {{form.price(class='form-control')}}
+                </div>
+                <div class="form-group">
+                    <label for="">
+                        {{form.stock.label}}
+                    </label>
+                    {{form.stock(class='form-control')}}
+                </div>
+                <div class="form-group">
+                    <label for="">
+                        {{form.image.label}}
+                    </label>
+                    {{form.image(class='form-control')}}
+                </div>
+                <div class="form-group" style="margin-left:55% ;">
+                    <a href="{{ url_for('item_blueprint.list_item',id=c_id) }}" class="btn btn-secondary">Cancel</a>
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock content %}

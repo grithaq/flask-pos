@@ -45,7 +45,7 @@ def delete_category(id):
     return redirect(url_for("item_blueprint.list_category"))
 
 
-@item_blueprint.route('/category/<id>/item/')
+@item_blueprint.route('/category/<id>/item/', methods=['GET', 'POST'])
 def list_item(id):
     items = Item.query.filter_by(category_id=id)
     return render_template("items.html", items=items, id=id)
@@ -56,7 +56,7 @@ def add_item(id):
     if request.method=="POST" and form.validate_on_submit:
         item = Item()
         item.name = form.name.data
-        item.desctiption = form.description.data
+        item.description = form.description.data
         item.price = form.price.data
         item.stock = form.stock.data
         item.category_id = id
@@ -69,6 +69,34 @@ def add_item(id):
         db.session.commit()
         return redirect(url_for('item_blueprint.list_item',id=id))
     return render_template("add_item.html", form=form, id=id)
+
+@item_blueprint.route('/category/<c_id>/item/<id>/edit', methods=['GET', 'POST'])
+def edit_item(c_id, id):
+    item = Item.query.filter_by(id=id).first()
+    print(request.method)
+    if request.method=='POST':
+        form = ItemForm()
+        print("Valid")
+        item.name = form.name.data
+        print(form.description.data)
+        item.description = form.description.data
+        item.price = form.price.data
+        item.stock = form.stock.data
+        if form.image.data!=None:
+            file = form.image.data
+            filename = file.filename
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+            item.image = os.path.join("/static/media", filename)
+        db.session.add(item)
+        db.session.commit()
+        return redirect(url_for('item_blueprint.list_item',id=c_id))
+    form = ItemForm()
+    print("Nggak Valid")
+    form.name.data = item.name
+    form.description.data = item.description
+    form.price.data = item.price
+    form.stock.data = item.stock
+    return render_template("edit_item.html", form=form, c_id=c_id, id=id)
 
 @item_blueprint.route("/category/<c_id>/item/<id>")
 def delete_item(c_id,id):
