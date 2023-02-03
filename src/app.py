@@ -16,6 +16,7 @@ migrate.init_app(app=app, db=db)
 csrf.init_app(app)
 
 app.register_blueprint(item_blueprint)
+app.register_blueprint(customer_blueprint)
 
 
 if __name__ == '__main__':
