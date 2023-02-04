@@ -5,6 +5,11 @@ from models import Customer
 
 customer_blueprint = Blueprint("customer_blueprint", __name__)
 
+@customer_blueprint.route("/customer/")
+def list_customer():
+    customers = Customer.query.all()
+    return render_template('customers.html', customers=customers)
+
 @customer_blueprint.route("/customer/add/", methods=['GET', 'POST'])
 def add_customer():
     form = CustomerForm()
