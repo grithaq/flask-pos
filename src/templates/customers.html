@@ -36,7 +36,7 @@
                     </td>
                     <td>
                         <div class="form-group">
-                            <a href="" class="btn btn-primary">Update</a>
+                            <a href="{{ url_for('customer_blueprint.edit_customer', id=c.id ) }}" class="btn btn-primary">Update</a>
                             <a href="{{ url_for('customer_blueprint.delete_customer',id=c.id ) }}" class="btn btn-danger">Delete</a>
                         </div>
                     </td>
