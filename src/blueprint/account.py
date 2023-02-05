@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, request, url_for, render_template
 from form.form_customer import CustomerForm
 from models import Customer
+from extensions import db
 
 
 customer_blueprint = Blueprint("customer_blueprint", __name__)
@@ -23,5 +24,12 @@ def add_customer():
             customer.phone_number = form.phone_number.data
             db.session.add(customer)
             db.session.commit()
-            return redirect(url_for('customer_blueprint.add_customer'))
+            return redirect(url_for('customer_blueprint.list_customer'))
     return render_template("add_customer.html", form=form)
+
+@customer_blueprint.route("/customer/<id>/delete")
+def delete_customer(id):
+    customer = Customer.query.filter_by(id=id).first()
+    db.session.delete(customer)
+    db.session.commit()
+    return redirect(url_for('customer_blueprint.list_customer'))
