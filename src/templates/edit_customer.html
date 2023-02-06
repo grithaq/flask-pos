@@ -1,44 +1,46 @@
-{% extends 'base.html' %}
+{% extends 'index.html' %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-        </div>
-        <div class="col">
-            <h1>Add Update</h1>
-            <form action="{{ url_for('customer_blueprint.edit_customer', id=id ) }}" method="POST" enctype="multipart/form-data">
-                {{form.csrf_token}}
-                <div class="form-group">
-                    <label for="">
+<div class="min-h-screen h-full flex flex-col after:flex-1">
+
+    <div class="max-w-sm mx-auto px-4 py-8">
+
+        <h1 class="text-3xl text-slate-800 font-bold mb-6">Edit Customer</h1>
+        <!-- Form -->
+        <form method="POST" action="{{ url_for('customer_blueprint.edit_customer', id=id ) }}">
+            {{form.csrf_token}}
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="email">
                         {{form.first_name.label}}
                     </label>
-                    {{form.first_name(class='form-control')}}
+                    {{form.first_name(class="form-input w-full")}}
                 </div>
-                <div class="form-group">
-                    <label for="">
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="email">
                         {{form.last_name.label}}
                     </label>
-                    {{form.last_name(class='form-control')}}
+                    {{form.last_name(class="form-input w-full")}}
                 </div>
-                <div class="form-group">
-                    <label for="">
-                        {{form.address.label}}
-                    </label>
-                    {{form.address(class='form-control')}}
-                </div>
-                <div class="form-group">
-                    <label for="">
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="email">
                         {{form.phone_number.label}}
                     </label>
-                    {{form.phone_number(class='form-control')}}
+                    {{form.phone_number(class="form-input w-full")}}
                 </div>
-                <div class="form-group" style="margin-left:55% ;">
-                    <a href="{{ url_for('customer_blueprint.list_customer') }}" class="btn btn-secondary">Cancel</a>
-                    <button class="btn btn-primary">Submit</button>
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="email">
+                        {{form.address.label}}
+                    </label>
+                    {{form.address(class="form-textarea w-full px-2 py-1")}}
                 </div>
-            </form>
-        </div>
-        <div class="col"></div>
+            </div>
+            <div class="flex items-center justify-end mt-6">
+                <a class="btn bg border-slate-200 hover:border-slate-300 text-slate-600" href="{{ url_for('customer_blueprint.list_customer' ) }}">Cancel</a>
+                <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3" type="submit">Submit</button>
+            </div>
+        </form>
+
     </div>
+
 </div>
 {% endblock content %}

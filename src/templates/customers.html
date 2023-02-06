@@ -225,7 +225,7 @@
                                 <div class="text-left">{{c.phone_number}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <a href="" class="btn border-slate-200 hover--border-slate-300 bg-blue-600">
+                                <a href="{{ url_for('customer_blueprint.edit_customer',id=c.id ) }}" class="btn border-slate-200 hover--border-slate-300 bg-blue-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                         <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
@@ -233,7 +233,7 @@
                                         <line x1="16" y1="5" x2="19" y2="8" />
                                       </svg>
                                 </a>
-                                <a href="" class="btn border-slate-200 hover--border-slate-300">
+                                <a href="{{ url_for('customer_blueprint.delete_customer', id=c.id ) }}" class="btn border-slate-200 hover--border-slate-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                         <line x1="4" y1="7" x2="20" y2="7" />
