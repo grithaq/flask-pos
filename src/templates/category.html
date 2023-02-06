@@ -1,41 +1,232 @@
-{% extends "base.html" %}
+{% extends "index.html" %}
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col"></div>
-        <div class="col">
-            <a href="{{ url_for('item_blueprint.add_category' ) }}" style="margin-left: 55%;" class="btn btn-secondary">Create New</a>
-            <table class="table">
-                <thead>
-                  <tr>
-                      <th scope="col">No</th>
-                    <th scope="col">Name</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for c in categories %}
-                  <tr>
-                    <td>
-                        {{loop.index}}
-                    </td>
-                    <td>
-                        {{c.name}}
-                    </td>
-                    <td>
-                        <div class="form-group">
-                            <a href="{{url_for('item_blueprint.edit_category', id=c.id)}}" class="btn btn-primary">Update</a>
-                            <a href="{{url_for('item_blueprint.delete_category', id=c.id)}}" class="btn btn-danger">Delete</a>
-                        </div>
-                    </td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
+
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+
+  <!-- Dashboard actions -->
+  <div class="sm:flex sm:justify-between sm:items-center mb-8">
+
+      <!-- Left: Avatars -->
+      <ul class="flex flex-wrap justify-center sm:justify-start mb-8 sm:mb-0 -space-x-3 -ml-px">
+      </ul>
+
+      <!-- Right: Actions -->
+      <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+
+          <!-- Filter button -->
+          <div class="relative inline-flex" x-data="{ open: false }">
+              <button class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600" aria-haspopup="true" @click.prevent="open = !open" :aria-expanded="open">
+                  <span class="sr-only">Filter</span><wbr>
+                  <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
+                      <path d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
+                  </svg>
+              </button>
+              <div class="origin-top-right z-10 absolute top-full left-0 right-auto md:left-auto md:right-0 min-w-56 bg-white border border-slate-200 pt-1.5 rounded shadow-lg overflow-hidden mt-1" @click.outside="open = false" @keydown.escape.window="open = false" x-show="open" x-transition:enter="transition ease-out duration-200 transform" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-out duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-cloak>
+                  <div class="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4">Filters</div>
+                  <ul class="mb-4">
+                      <li class="py-1 px-3">
+                          <label class="flex items-center">
+                              <input type="checkbox" class="form-checkbox" checked />
+                              <span class="text-sm font-medium ml-2">Direct VS Indirect</span>
+                          </label>
+                      </li>
+                      <li class="py-1 px-3">
+                          <label class="flex items-center">
+                              <input type="checkbox" class="form-checkbox" checked />
+                              <span class="text-sm font-medium ml-2">Real Time Value</span>
+                          </label>
+                      </li>
+                      <li class="py-1 px-3">
+                          <label class="flex items-center">
+                              <input type="checkbox" class="form-checkbox" checked />
+                              <span class="text-sm font-medium ml-2">Top Channels</span>
+                          </label>
+                      </li>
+                      <li class="py-1 px-3">
+                          <label class="flex items-center">
+                              <input type="checkbox" class="form-checkbox" />
+                              <span class="text-sm font-medium ml-2">Sales VS Refunds</span>
+                          </label>
+                      </li>
+                      <li class="py-1 px-3">
+                          <label class="flex items-center">
+                              <input type="checkbox" class="form-checkbox" />
+                              <span class="text-sm font-medium ml-2">Last Order</span>
+                          </label>
+                      </li>
+                      <li class="py-1 px-3">
+                          <label class="flex items-center">
+                              <input type="checkbox" class="form-checkbox" />
+                              <span class="text-sm font-medium ml-2">Total Spent</span>
+                          </label>
+                      </li>
+                  </ul>
+                  <div class="py-2 px-3 border-t border-slate-200 bg-slate-50">
+                      <ul class="flex items-center justify-between">
+                          <li>
+                              <button class="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">Clear</button>
+                          </li>
+                          <li>
+                              <button class="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white" @click="open = false" @focusout="open = false">Apply</button>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Datepicker built with flatpickr -->
+          <div class="relative">
+              <input class="datepicker form-input pl-9 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300 w-60" placeholder="Select dates" data-class="flatpickr-right" />
+              <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                  <svg class="w-4 h-4 fill-current text-slate-500 ml-3" viewBox="0 0 16 16">
+                      <path d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
+                  </svg>
+              </div>
+          </div>
+          <!-- Start -->
+  <div x-data="{ modalOpen: false }">
+      <button
+          class="btn bg-indigo-500 hover:bg-indigo-600 text-white"
+          @click.prevent="modalOpen = true"
+          aria-controls="feedback-modal"
+      >Add New Category</button>
+      <!-- Modal backdrop -->
+      <div
+          class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity"
+          x-show="modalOpen"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0"
+          x-transition:enter-end="opacity-100"
+          x-transition:leave="transition ease-out duration-100"
+          x-transition:leave-start="opacity-100"
+          x-transition:leave-end="opacity-0"
+          aria-hidden="true"
+          x-cloak
+      ></div>
+      <!-- Modal dialog -->
+      <div
+          id="feedback-modal"
+          class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center px-4 sm:px-6"
+          role="dialog"
+          aria-modal="true"
+          x-show="modalOpen"
+          x-transition:enter="transition ease-in-out duration-200"
+          x-transition:enter-start="opacity-0 translate-y-4"
+          x-transition:enter-end="opacity-100 translate-y-0"
+          x-transition:leave="transition ease-in-out duration-200"
+          x-transition:leave-start="opacity-100 translate-y-0"
+          x-transition:leave-end="opacity-0 translate-y-4"
+          x-cloak
+      >
+          <div class="bg-white rounded shadow-lg overflow-auto max-w-lg w-full max-h-full" @click.outside="modalOpen = false" @keydown.escape.window="modalOpen = false">
+              <form action="{{url_for('item_blueprint.add_category')}}" method="POST">
+                  {{form.csrf_token }}
+                  <!-- Modal header -->
+              <div class="px-5 py-3 border-b border-slate-200">
+                  <div class="flex justify-between items-center">
+                      <div class="font-semibold text-slate-800">New Category</div>
+                      <button class="text-slate-400 hover:text-slate-500" @click="modalOpen = false">
+                          <div class="sr-only">Close</div>
+                          <svg class="w-4 h-4 fill-current">
+                              <path d="M7.95 6.536l4.242-4.243a1 1 0 111.415 1.414L9.364 7.95l4.243 4.242a1 1 0 11-1.415 1.415L7.95 9.364l-4.243 4.243a1 1 0 01-1.414-1.415L6.536 7.95 2.293 3.707a1 1 0 011.414-1.414L7.95 6.536z" />
+                          </svg>
+                      </button>
+                  </div>
+              </div>
+              <!-- Modal content -->
+              <div class="px-5 py-4">
+                  <div class="text-sm">
+                  </div>
+                  <div class="space-y-3">
+                      <div>
+                          <label class="block text-sm font-medium mb-1" for="name">{{form.name.label}}</label>
+                          {{form.name(class='form-input w-full px-2 py-1', required='True')}}
+                      </div>
+                  </div>
+              </div>
+              <!-- Modal footer -->
+              <div class="px-5 py-4 border-t border-slate-200">
+                  <div class="flex flex-wrap justify-end space-x-2">
+                      <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600" @click="modalOpen = false">Cancel</button>
+                      <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white" type="submit">Send</button>
+                  </div>
+              </div>
+              </form>
+          </div>
+      </div>                                            
+  </div>
+  <!-- End -->
+
+      </div>
+
+  </div>
+
+  <div class="bg-white shadow-lg rounded-sm border border-slate-200">
+      <header class="px-5 py-4">
+          <h2 class="font-semibold text-slate-800">Categories <span class="text-slate-400 font-medium">
+              {{categories|length}}
+          </span></h2>
+      </header>
+      <div x-data="handleSelect">
+
+          <!-- Table -->
+          <div class="overflow-x-auto">
+              <table class="table-auto w-full">
+                  <!-- Table header -->
+                  <thead class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                      <tr>
+                          <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                              <span class="font-semibold text-left">Name</span>
+                          </th>
+                          <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                              <span class="font-semibold text-left">Create At</span>
+                          </th>
+                          <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                              <span class="sr-only">Menu</span>
+                          </th>
+                      </tr>
+                  </thead>
+                  <!-- Table body -->
+                  <tbody class="text-sm divide-y divide-slate-200">
+                      <!-- Row -->
+                      {% for c in categories %}
+                      <tr>
+                          <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                              <div class="text-center">{{c.name}}</div>
+                          </td>
+                          <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                              <div class="text-center">{{c.create_at}}</div>
+                          </td>
+                          <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                              <a href="{{ url_for('item_blueprint.edit_category',id=c.id ) }}" class="btn border-slate-200 hover--border-slate-300 bg-blue-600">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                                      <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                                      <line x1="16" y1="5" x2="19" y2="8" />
+                                    </svg>
+                              </a>
+                              <a href="{{ url_for('item_blueprint.delete_category', id=c.id ) }}" class="btn border-slate-200 hover--border-slate-300">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="#597e8d" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <line x1="4" y1="7" x2="20" y2="7" />
+                                      <line x1="10" y1="11" x2="10" y2="17" />
+                                      <line x1="14" y1="11" x2="14" y2="17" />
+                                      <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                      <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                    </svg>
+                              </a>
+                          </td>
+                      </tr>
+
+                      {% endfor %}
+                  </tbody>
               </table>
 
-        </div>
-        <div class="col"></div>
-    </div>
+          </div>
+      </div>
+  </div>
+
 </div>
   
 {% endblock content %}
