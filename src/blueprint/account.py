@@ -9,7 +9,8 @@ customer_blueprint = Blueprint("customer_blueprint", __name__)
 @customer_blueprint.route("/customer/")
 def list_customer():
     customers = Customer.query.all()
-    return render_template('customers.html', customers=customers)
+    form = CustomerForm()
+    return render_template('customers.html', customers=customers, form=form)
 
 @customer_blueprint.route("/customer/add/", methods=['GET', 'POST'])
 def add_customer():
@@ -25,7 +26,6 @@ def add_customer():
             db.session.add(customer)
             db.session.commit()
             return redirect(url_for('customer_blueprint.list_customer'))
-    return render_template("add_customer.html", form=form)
 
 @customer_blueprint.route("/customer/<id>/edit", methods=['GET', 'POST'])
 def edit_customer(id):
